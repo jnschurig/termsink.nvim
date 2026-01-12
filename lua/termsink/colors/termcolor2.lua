@@ -1,14 +1,13 @@
 local M = {}
 
-local NS = vim.api.nvim_create_namespace("termsink.termcolor")
-
 local ESC = "\27"
 local BEL = "\7"
+local ST = ESC .. "\\"
 
 -- tmux-safe OSC wrapper
 local function osc(seq)
 	if vim.env.TMUX then
-		return ESC .. "Ptmux;" .. ESC .. seq .. ESC .. "\\"
+		return ESC .. "Ptmux;" .. ESC .. seq .. ST
 	else
 		return ESC .. seq
 	end
@@ -39,50 +38,52 @@ local UI_OSC = {
 
 function M.query_all()
 	local result = { ui = {}, palette = {} }
-
 	local pending_ui = vim.tbl_count(UI_OSC)
 	local pending_palette = 16
 	local buffer = ""
 	local done = false
+
+	local stdin = vim.loop.new_tty(0, true)
 
 	local function finish()
 		if done then
 			return
 		end
 		done = true
-		vim.on_key(nil, NS)
+		stdin:read_stop()
+		stdin:close()
 	end
 
-	vim.on_key(function(key)
-		buffer = buffer .. key
+	stdin:read_start(function(err, chunk)
+		if err or not chunk then
+			return
+		end
+		buffer = buffer .. chunk
 
 		while true do
-			local seq, rest = buffer:match("^(.-)\7(.*)")
+			local seq, rest = buffer:match("^(.-)\7(.*)") or buffer:match("^(.-)\27\\(.*)")
 			if not seq then
 				break
 			end
 			buffer = rest
 
 			-- UI colors
-			local ui_code, ui_rgb = seq:match("%](%d+);(rgb:[^%]]+)")
-			ui_code = tonumber(ui_code)
-
-			if ui_code and ui_rgb then
-				for name, code in pairs(UI_OSC) do
-					if ui_code == code then
-						result.ui[name] = rgb16_to_hex(ui_rgb)
+			local code, rgb = seq:match("%](%d+);(rgb:[^%]]+)")
+			code = tonumber(code)
+			if code and rgb then
+				for name, osc_code in pairs(UI_OSC) do
+					if code == osc_code then
+						result.ui[name] = rgb16_to_hex(rgb)
 						pending_ui = pending_ui - 1
-						break
 					end
 				end
 			end
 
 			-- Palette
-			local idx, pal_rgb = seq:match("%]4;(%d+);(rgb:[^%]]+)")
+			local idx, pal = seq:match("%]4;(%d+);(rgb:[^%]]+)")
 			idx = tonumber(idx)
-
-			if idx and pal_rgb and idx < 16 and not result.palette[idx + 1] then
-				result.palette[idx + 1] = rgb16_to_hex(pal_rgb)
+			if idx and idx < 16 and not result.palette[idx + 1] then
+				result.palette[idx + 1] = rgb16_to_hex(pal)
 				pending_palette = pending_palette - 1
 			end
 
@@ -91,7 +92,7 @@ function M.query_all()
 				return
 			end
 		end
-	end, NS)
+	end)
 
 	-- Emit queries
 	for _, code in pairs(UI_OSC) do
@@ -102,12 +103,11 @@ function M.query_all()
 		vim.api.nvim_chan_send(vim.v.stderr, osc("]4;" .. i .. ";?" .. BEL))
 	end
 
-	-- Wait up to 200ms
-	vim.wait(200, function()
+	vim.wait(300, function()
 		return done
 	end, 10)
-
 	finish()
+
 	return result
 end
 
