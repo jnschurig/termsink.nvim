@@ -77,17 +77,37 @@ print("subkey_value_count: " .. subkey_value_count)
 -- print("palette table len: " .. table_len)
 print("------ termcolor test end ------")
 
+-- if term_colors == nil or term_colors.colors == nil then
+--   term_colors.colors = {palette = {} }
+-- end
+--
+-- if term_colors.colors.cursor_color == nil then term_colors.colors.cursor_color = pure_white end
+-- if term_colors.colors.cursor_text == nil then term_colors.colors.cursor_text = pure_black end
+-- if term_colors.colors.selection_background == nil then term_colors.colors.selection_background = pure_gray end
+-- if term_colors.colors.background == nil then term_colors.colors.background = pure_black end
+-- if term_colors.colors.selection_foreground == nil then term_colors.colors.selection_foreground = pure_white end
+-- if term_colors.colors.foreground == nil then term_colors.colors.foreground = pure_white end
+-- if term_colors.colors.palette[1] == nil then term_colors.colors.cursor_color = pure_black end
+-- if term_colors.colors.palette[2] == nil then term_colors.colors.cursor_color = pure_red end
+-- if term_colors.colors.palette[3] == nil then term_colors.colors.cursor_color = pure_green end
+-- if term_colors.colors.palette[4] == nil then term_colors.colors.cursor_color = pure_blue end
+-- if term_colors.colors.palette[5] == nil then term_colors.colors.cursor_color = pure_yellow end
+-- if term_colors.colors.palette[6] == nil then term_colors.colors.cursor_color = pure_purple end
+-- if term_colors.colors.palette[7] == nil then term_colors.colors.cursor_color = pure_orange end
+-- if term_colors.colors.palette[8] == nil then term_colors.colors.cursor_color = pure_white end
+
+
 ---colors table
 local colors = {
 	---main colors
 	main = {
-		red      = functions.closest_color_match(pure_red   , term_colors.palette),
-		green    = functions.closest_color_match(pure_green , term_colors.palette),
-		yellow   = functions.closest_color_match(pure_yellow, term_colors.palette),
-		blue     = functions.closest_color_match(pure_blue  , term_colors.palette),
-		purple   = functions.closest_color_match(pure_purple, term_colors.palette),
-		cyan     = functions.closest_color_match(pure_cyan  , term_colors.palette),
-		orange   = functions.closest_color_match(pure_orange, term_colors.palette),
+		red      = functions.closest_color_match(pure_red   , term_colors.colors.palette),
+		green    = functions.closest_color_match(pure_green , term_colors.colors.palette),
+		yellow   = functions.closest_color_match(pure_yellow, term_colors.colors.palette),
+		blue     = functions.closest_color_match(pure_blue  , term_colors.colors.palette),
+		purple   = functions.closest_color_match(pure_purple, term_colors.colors.palette),
+		cyan     = functions.closest_color_match(pure_cyan  , term_colors.colors.palette),
+		orange   = functions.closest_color_match(pure_orange, term_colors.colors.palette),
   },
 }
 
@@ -100,22 +120,22 @@ colors.main.darkpurple  = functions.adjust_color_value(colors.main.purple, 0.75)
 colors.main.darkorange  = functions.adjust_color_value(colors.main.orange, 0.75)
 colors.main.paleblue    = functions.adjust_color_value(colors.main.blue  , 1.25)
 
-term_colors.palette[17] = term_colors.ui.foreground
-term_colors.palette[18] = term_colors.ui.background
-term_colors.palette[19] = term_colors.ui.cursor_color
-term_colors.palette[20] = term_colors.ui.cursor_text
-term_colors.palette[21] = term_colors.ui.selection_background
-term_colors.palette[22] = term_colors.ui.selection_foreground
+term_colors.colors.palette[17] = term_colors.colors.foreground
+term_colors.colors.palette[18] = term_colors.colors.background
+term_colors.colors.palette[19] = term_colors.colors.cursor_color
+term_colors.colors.palette[20] = term_colors.colors.cursor_text
+term_colors.colors.palette[21] = term_colors.colors.selection_background
+term_colors.colors.palette[22] = term_colors.colors.selection_foreground
 
-colors.main.gray     = functions.closest_color_match(pure_gray, term_colors.palette)
-colors.main.white    = functions.closest_color_match(pure_white, term_colors.palette)
-colors.main.black    = functions.closest_color_match(pure_black, term_colors.palette)
+colors.main.gray     = functions.closest_color_match(pure_gray , term_colors.colors.palette)
+colors.main.white    = functions.closest_color_match(pure_white, term_colors.colors.palette)
+colors.main.black    = functions.closest_color_match(pure_black, term_colors.colors.palette)
 
 	---colors applied to the editor
 colors.editor = {
   link = colors.main.cyan,
   cursor = colors.main.yellow,
-  title = term_colors.ui.foreground
+  title = term_colors.colors.foreground
 }
 
 colors.lsp = {
@@ -144,11 +164,11 @@ colors.backgrounds = {}
 -- }
 
 ---editor colors
-colors.editor.bg = term_colors.ui.background
+colors.editor.bg = term_colors.colors.background
 colors.editor.bg_alt = functions.adjust_color_value(colors.editor.bg, 0.75)
-colors.editor.fg = term_colors.ui.foreground
+colors.editor.fg = term_colors.colors.foreground
 colors.editor.fg_dark = functions.adjust_color_value(colors.editor.fg, 0.75)
-colors.editor.selection = term_colors.ui.selection_background
+colors.editor.selection = term_colors.colors.selection_background
 colors.editor.contrast = functions.adjust_color_value(colors.editor.selection, 0.75) -- darker than selection
 colors.editor.active = colors.editor.selection -- similar to selection
 colors.editor.border = colors.editor.selection -- slightly darker than active
