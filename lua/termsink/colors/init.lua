@@ -1,5 +1,6 @@
 -- local high_visibility = require "termsink.util.config".settings.high_visibility
-local termcolor = require("termsink.colors.termcolor3")
+-- local termcolor = require("termsink.colors.termcolor3")
+local termcolor = require("termsink.colors.termcolor4")
 -- local closest_color_match = require("termsink.functions.functions.closest_color_match")
 -- local adjust_color_value = require("termsink.functions.functions.adjust_color_value")
 local functions = require("termsink.functions")
@@ -30,14 +31,15 @@ local pure_gray   = "#808080"
 -- 	local_use_palette[i] = term_colors.palette[idx]
 -- end
 --
-local term_colors = termcolor.query_all()
+-- local term_colors = termcolor.query_all()
+local term_colors, _ = termcolor.get_theme_info()
 
 print("------ termcolor test ------")
 print("term_color type: ", type(term_colors))
 
 local key_value_count = 0
 local subkey_value_count = 0
-for key, value in pairs(term_colors) do
+for key, value in pairs(term_colors.colors) do
   key_value_count = key_value_count + 1
   print("key: " .. key)
   if value then
@@ -57,22 +59,22 @@ end
 print("key_value_count: " .. key_value_count)
 print("subkey_value_count: " .. subkey_value_count)
 
-print("-- ui table --")
-local table_len = 0
-for key, value in pairs(term_colors.ui) do
-  table_len = table_len + 1
-  print("key: " .. key .. " - value: " .. value)
-end
-print("ui table len: " .. table_len)
-
-table_len = 0
-
-print("-- palette table --")
-for idx, value in ipairs(term_colors.palette) do
-  table_len = table_len + 1
-  print("idx: " .. idx .. " - value: " .. value)
-end
-print("palette table len: " .. table_len)
+-- print("-- ui table --")
+-- local table_len = 0
+-- for key, value in pairs(term_colors.ui) do
+--   table_len = table_len + 1
+--   print("key: " .. key .. " - value: " .. value)
+-- end
+-- print("ui table len: " .. table_len)
+--
+-- table_len = 0
+--
+-- print("-- palette table --")
+-- for idx, value in ipairs(term_colors.palette) do
+--   table_len = table_len + 1
+--   print("idx: " .. idx .. " - value: " .. value)
+-- end
+-- print("palette table len: " .. table_len)
 print("------ termcolor test end ------")
 
 ---colors table
