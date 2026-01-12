@@ -1,5 +1,7 @@
 local M = {}
 
+local NS = vim.api.nvim_create_namespace("termsink.termcolor")
+
 local ESC = "\27"
 local BEL = "\7"
 
@@ -48,7 +50,7 @@ function M.query_all()
 			return
 		end
 		done = true
-		vim.on_key(nil, M)
+		vim.on_key(nil, NS)
 	end
 
 	vim.on_key(function(key)
@@ -89,7 +91,7 @@ function M.query_all()
 				return
 			end
 		end
-	end, M)
+	end, NS)
 
 	-- Emit queries
 	for _, code in pairs(UI_OSC) do
