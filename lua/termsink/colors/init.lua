@@ -30,7 +30,9 @@ local pure_gray   = "#808080"
 -- 	local_use_palette[i] = term_colors.palette[idx]
 -- end
 --
-local term_colors = termcolor.query_all()
+local term_colors = termcolor.query_all(function(c)
+  vim.print(c)
+end)
 
 print("------ termcolor test ------")
 print("term_color type: ", type(term_colors))
