@@ -57,15 +57,22 @@ end
 print("key_value_count: " .. key_value_count)
 print("subkey_value_count: " .. subkey_value_count)
 
+print("-- ui table --")
 local table_len = 0
-for idx, value in ipairs(term_colors.ui) do
-  print("idx: " .. idx .. " - value: " .. value)
+for key, value in pairs(term_colors.ui) do
   table_len = table_len + 1
+  print("key: " .. key .. " - value: " .. value)
 end
 print("ui table len: " .. table_len)
 
+table_len = 0
 
-
+print("-- palette table --")
+for idx, value in ipairs(term_colors.palette) do
+  table_len = table_len + 1
+  print("idx: " .. idx .. " - value: " .. value)
+end
+print("palette table len: " .. table_len)
 print("------ termcolor test end ------")
 
 ---colors table
