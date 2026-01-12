@@ -3,6 +3,7 @@ local M = {}
 local ESC = "\27"
 local BEL = "\7"
 
+-- tmux-safe OSC wrapper
 local function osc(seq)
 	if vim.env.TMUX then
 		return ESC .. "Ptmux;" .. ESC .. seq .. ESC .. "\\"
@@ -11,6 +12,7 @@ local function osc(seq)
 	end
 end
 
+-- rgb:RRRR/GGGG/BBBB → #RRGGBB
 local function rgb16_to_hex(rgb)
 	local r, g, b = rgb:match("rgb:([%x]+)/([%x]+)/([%x]+)")
 	if not r then
@@ -24,60 +26,88 @@ local function rgb16_to_hex(rgb)
 	)
 end
 
---- Query ANSI palette colors
---- @param count number: usually 16 or 256
---- @param callback fun(colors: string[]|nil)
-function M.query_palette(count, callback)
-	count = count or 16
-	local results = {}
-	local pending = count
-	local buffer = ""
+local UI_OSC = {
+	foreground = 10,
+	background = 11,
+	cursor_color = 12,
+	selection_background = 17,
+	cursor_text = 18,
+	selection_foreground = 19,
+}
 
+--- Query terminal UI colors + ANSI 16-color palette
+--- callback(result: { ui: table, palette: string[] })
+function M.query_all(callback)
+	local result = { ui = {}, palette = {} }
+
+	local pending_ui = vim.tbl_count(UI_OSC)
+	local pending_palette = 16
+	local buffer = ""
 	local done = false
+
 	local function finish()
 		if done then
 			return
 		end
 		done = true
 		vim.on_key(nil, M)
-
-		if #results == count then
-			callback(results)
-		else
-			callback(nil)
-		end
+		callback(result)
 	end
 
 	vim.on_key(function(key)
 		buffer = buffer .. key
 
 		while true do
-			local osc_reply = buffer:match("%]4;(%d+);(rgb:[^\7]+)\7")
-			if not osc_reply then
+			local seq, rest = buffer:match("^(.-)\7(.*)")
+			if not seq then
 				break
 			end
+			buffer = rest
 
-			local idx, rgb = buffer:match("%]4;(%d+);(rgb:[^\7]+)\7")
-			idx = tonumber(idx) + 1 -- Lua arrays are 1-based
-			results[idx] = rgb16_to_hex(rgb)
+			-- UI colors: OSC <code>
+			local ui_code, ui_rgb = seq:match("%](%d+);(rgb:[^%]]+)")
+			ui_code = tonumber(ui_code)
 
-			buffer = buffer:gsub("%]4;%d+;rgb:[^\7]+\7", "", 1)
-			pending = pending - 1
+			if ui_code and ui_rgb then
+				for name, code in pairs(UI_OSC) do
+					if ui_code == code then
+						result.ui[name] = rgb16_to_hex(ui_rgb)
+						pending_ui = pending_ui - 1
+						break
+					end
+				end
+			end
 
-			if pending == 0 then
+			-- Palette colors: OSC 4;<index>
+			local idx, pal_rgb = seq:match("%]4;(%d+);(rgb:[^%]]+)")
+			idx = tonumber(idx)
+
+			if idx and pal_rgb and idx < 16 then
+				if not result.palette[idx + 1] then
+					result.palette[idx + 1] = rgb16_to_hex(pal_rgb)
+					pending_palette = pending_palette - 1
+				end
+			end
+
+			if pending_ui <= 0 and pending_palette <= 0 then
 				finish()
 				return
 			end
 		end
 	end, M)
 
-	-- Send queries
-	for i = 0, count - 1 do
+	-- Emit UI color queries
+	for _, code in pairs(UI_OSC) do
+		vim.api.nvim_chan_send(vim.v.stderr, osc("]" .. code .. ";?" .. BEL))
+	end
+
+	-- Emit ANSI palette queries (0–15)
+	for i = 0, 15 do
 		vim.api.nvim_chan_send(vim.v.stderr, osc("]4;" .. i .. ";?" .. BEL))
 	end
 
-	-- Timeout safeguard
-	vim.defer_fn(finish, count == 256 and 300 or 100)
+	-- Safety timeout
+	vim.defer_fn(finish, 200)
 end
 
 return M
