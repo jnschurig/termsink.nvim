@@ -59,6 +59,9 @@ local rgb_to_hex = function(r, g, b)
 end
 
 local function hex_to_rgb(hex)
+	if not hex then
+		return { 0, 0, 0 }
+	end
 	-- remove leading '#', if present
 	hex = hex:gsub("#", "")
 	return {
