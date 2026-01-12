@@ -1,6 +1,5 @@
 -- local high_visibility = require "termsink.util.config".settings.high_visibility
--- local term_colors = require("termsink.colors.termcolor")
-local term_colors = require("termcolor")
+local term_colors = require("termsink.colors.termcolor")
 -- local closest_color_match = require("termsink.functions.functions.closest_color_match")
 -- local adjust_color_value = require("termsink.functions.functions.adjust_color_value")
 local functions = require("termsink.functions")
