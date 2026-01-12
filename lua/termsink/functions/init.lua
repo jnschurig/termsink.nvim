@@ -106,6 +106,9 @@ M.closest_color_match = function(spec_color, colors_table)
 	local closest_color = nil
 
 	print("------- color test -------")
+	if not colors_table then
+		print("colors table is nil")
+	end
 	for _, color in ipairs(colors_table) do
 		print("coloridx: " .. _ .. "color: " .. color)
 		local new_diff = nil
