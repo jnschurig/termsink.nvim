@@ -129,9 +129,9 @@ M.adjust_color_value = function(starting_color, adjustment_factor)
 		return starting_color
 	end
 	local rgb = hex_to_rgb(starting_color)
-	local r = math.floor(rgb[1] * adjustment_factor)
-	local g = math.floor(rgb[2] * adjustment_factor)
-	local b = math.floor(rgb[3] * adjustment_factor)
+	local r = math.min(math.floor(rgb[1] * adjustment_factor), 255)
+	local g = math.min(math.floor(rgb[2] * adjustment_factor), 255)
+	local b = math.min(math.floor(rgb[3] * adjustment_factor), 255)
 	return rgb_to_hex(r, g, b)
 end
 
