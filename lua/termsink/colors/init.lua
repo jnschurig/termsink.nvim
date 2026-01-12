@@ -30,6 +30,9 @@ local pure_gray   = "#808080"
 -- 	local_use_palette[i] = term_colors.palette[idx]
 -- end
 
+print("------ termcolor test -------")
+print("term_color type: ", type(term_colors))
+
 ---colors table
 local colors = {
 	---main colors

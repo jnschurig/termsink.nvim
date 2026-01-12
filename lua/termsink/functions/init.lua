@@ -105,12 +105,12 @@ M.closest_color_match = function(spec_color, colors_table)
 	local diff_score = 300 -- biggest difference can only be 255
 	local closest_color = nil
 
-	print("------- color test -------")
-	if not colors_table then
-		print("colors table is nil")
-	end
+	-- print("------- color test -------")
+	-- if not colors_table then
+	-- 	print("colors table is nil")
+	-- end
 	for _, color in ipairs(colors_table) do
-		print("coloridx: " .. _ .. "color: " .. color)
+		-- print("coloridx: " .. _ .. "color: " .. color)
 		local new_diff = nil
 		if not color then
 			new_diff = 400
