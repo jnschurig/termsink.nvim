@@ -1,5 +1,5 @@
 -- local high_visibility = require "termsink.util.config".settings.high_visibility
-local termcolor = require("termsink.colors.termcolor")
+local termcolor = require("termsink.colors.termcolor2")
 -- local closest_color_match = require("termsink.functions.functions.closest_color_match")
 -- local adjust_color_value = require("termsink.functions.functions.adjust_color_value")
 local functions = require("termsink.functions")
@@ -30,9 +30,7 @@ local pure_gray   = "#808080"
 -- 	local_use_palette[i] = term_colors.palette[idx]
 -- end
 --
-local term_colors = termcolor.query_all(function(c)
-  vim.print(c)
-end)
+local term_colors = termcolor.query_all()
 
 print("------ termcolor test ------")
 print("term_color type: ", type(term_colors))
