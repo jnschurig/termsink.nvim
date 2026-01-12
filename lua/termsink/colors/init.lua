@@ -36,6 +36,7 @@ print("------ termcolor test ------")
 print("term_color type: ", type(term_colors))
 
 local key_value_count = 0
+local subkey_value_count = 0
 for key, value in pairs(term_colors) do
   key_value_count = key_value_count + 1
   print("key: " .. key)
@@ -43,7 +44,6 @@ for key, value in pairs(term_colors) do
     if type(value) ~= "table" then
       print("value: " .. value)
     else
-      local subkey_value_count = 0
       for subkey, subval in pairs(value) do
         subkey_value_count = subkey_value_count + 1
         print("  subkey: " .. subkey)
