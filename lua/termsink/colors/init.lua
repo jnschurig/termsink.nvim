@@ -41,7 +41,7 @@ for key, value in pairs(term_colors) do
     if type(value) ~= "table" then
       print("value: " .. value)
     else
-      for subkey, subval in ipairs(value) do
+      for subkey, subval in pairs(value) do
         print("  subkey: " .. subkey)
         print("  subval: " .. subval)
       end
