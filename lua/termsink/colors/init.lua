@@ -33,6 +33,18 @@ local pure_gray   = "#808080"
 print("------ termcolor test -------")
 print("term_color type: ", type(term_colors))
 
+for key, value in pairs(term_colors) do
+  print("key: " .. key)
+  if type(value) ~= "table" then
+    print("value: " .. value)
+  else
+    for subkey, subval in ipairs(value) do
+      print("  subkey: " .. subkey)
+      print("  subval: " .. subval)
+    end
+  end
+end
+
 ---colors table
 local colors = {
 	---main colors
