@@ -96,11 +96,11 @@ function M.query_all()
 
 	-- Emit queries
 	for _, code in pairs(UI_OSC) do
-		vim.api.nvim_chan_send(vim.v.stderr, osc("]" .. code .. ";?" .. BEL))
+		vim.api.nvim_chan_send(vim.v.stdout, osc("]" .. code .. ";?" .. BEL))
 	end
 
 	for i = 0, 15 do
-		vim.api.nvim_chan_send(vim.v.stderr, osc("]4;" .. i .. ";?" .. BEL))
+		vim.api.nvim_chan_send(vim.v.stdout, osc("]4;" .. i .. ";?" .. BEL))
 	end
 
 	vim.wait(300, function()
