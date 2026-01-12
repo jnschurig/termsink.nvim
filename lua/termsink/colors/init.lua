@@ -35,20 +35,26 @@ local term_colors = termcolor.query_all()
 print("------ termcolor test ------")
 print("term_color type: ", type(term_colors))
 
+local key_value_count = 0
 for key, value in pairs(term_colors) do
+  key_value_count = key_value_count + 1
   print("key: " .. key)
   if value then
     if type(value) ~= "table" then
       print("value: " .. value)
     else
+      local subkey_value_count = 0
       for subkey, subval in pairs(value) do
+        subkey_value_count = subkey_value_count + 1
         print("  subkey: " .. subkey)
         print("  subval: " .. subval)
       end
+      print("subkey_value_count: " .. subkey_value_count)
     end
   else
     print("value is nil")
   end
+  print("key_value_count: " .. key_value_count)
 end
 print("------ termcolor test end ------")
 
