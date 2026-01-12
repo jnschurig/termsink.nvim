@@ -49,13 +49,13 @@ for key, value in pairs(term_colors) do
         print("  subkey: " .. subkey)
         print("  subval: " .. subval)
       end
-      print("subkey_value_count: " .. subkey_value_count)
     end
   else
     print("value is nil")
   end
-  print("key_value_count: " .. key_value_count)
 end
+print("key_value_count: " .. key_value_count)
+print("subkey_value_count: " .. subkey_value_count)
 print("------ termcolor test end ------")
 
 ---colors table
