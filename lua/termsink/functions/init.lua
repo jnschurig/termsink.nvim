@@ -105,8 +105,14 @@ M.closest_color_match = function(spec_color, colors_table)
 	local diff_score = 300 -- biggest difference can only be 255
 	local closest_color = nil
 
+	print("------- color test -------")
 	for _, color in ipairs(colors_table) do
-		local new_diff = hex_color_diff(spec_color, color)
+		print("coloridx: " .. _ .. "color: " .. color)
+		local new_diff = nil
+		if not color then
+			new_diff = 400
+		end
+		new_diff = hex_color_diff(spec_color, color)
 		if new_diff < diff_score then
 			diff_score = new_diff
 			closest_color = color
