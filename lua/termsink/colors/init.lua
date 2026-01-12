@@ -34,30 +34,30 @@ local pure_gray   = "#808080"
 -- local term_colors = termcolor.query_all()
 local term_colors, _ = termcolor.get_theme_info()
 
-print("------ termcolor test ------")
-print("term_color type: ", type(term_colors))
-
-local key_value_count = 0
-local subkey_value_count = 0
-for key, value in pairs(term_colors.colors) do
-  key_value_count = key_value_count + 1
-  print("key: " .. key)
-  if value then
-    if type(value) ~= "table" then
-      print("value: " .. value)
-    else
-      for subkey, subval in pairs(value) do
-        subkey_value_count = subkey_value_count + 1
-        print("  subkey: " .. subkey)
-        print("  subval: " .. subval)
-      end
-    end
-  else
-    print("value is nil")
-  end
-end
-print("key_value_count: " .. key_value_count)
-print("subkey_value_count: " .. subkey_value_count)
+-- print("------ termcolor test ------")
+-- print("term_color type: ", type(term_colors))
+--
+-- local key_value_count = 0
+-- local subkey_value_count = 0
+-- for key, value in pairs(term_colors.colors) do
+--   key_value_count = key_value_count + 1
+--   print("key: " .. key)
+--   if value then
+--     if type(value) ~= "table" then
+--       print("value: " .. value)
+--     else
+--       for subkey, subval in pairs(value) do
+--         subkey_value_count = subkey_value_count + 1
+--         print("  subkey: " .. subkey)
+--         print("  subval: " .. subval)
+--       end
+--     end
+--   else
+--     print("value is nil")
+--   end
+-- end
+-- print("key_value_count: " .. key_value_count)
+-- print("subkey_value_count: " .. subkey_value_count)
 
 -- print("-- ui table --")
 -- local table_len = 0
@@ -75,7 +75,7 @@ print("subkey_value_count: " .. subkey_value_count)
 --   print("idx: " .. idx .. " - value: " .. value)
 -- end
 -- print("palette table len: " .. table_len)
-print("------ termcolor test end ------")
+-- print("------ termcolor test end ------")
 
 -- if term_colors == nil or term_colors.colors == nil then
 --   term_colors.colors = {palette = {} }
