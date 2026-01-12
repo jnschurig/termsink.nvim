@@ -30,7 +30,7 @@ local pure_gray   = "#808080"
 -- 	local_use_palette[i] = term_colors.palette[idx]
 -- end
 
-print("------ termcolor test -------")
+print("------ termcolor test ------")
 print("term_color type: ", type(term_colors))
 
 for key, value in pairs(term_colors) do
@@ -44,6 +44,7 @@ for key, value in pairs(term_colors) do
     end
   end
 end
+print("------ termcolor test end ------")
 
 ---colors table
 local colors = {
