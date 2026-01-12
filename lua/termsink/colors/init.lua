@@ -56,6 +56,16 @@ for key, value in pairs(term_colors) do
 end
 print("key_value_count: " .. key_value_count)
 print("subkey_value_count: " .. subkey_value_count)
+
+local table_len = 0
+for idx, value in ipairs(term_colors.ui) do
+  print("idx: " .. idx .. " - value: " .. value)
+  table_len = table_len + 1
+end
+print("ui table len: " .. table_len)
+
+
+
 print("------ termcolor test end ------")
 
 ---colors table
