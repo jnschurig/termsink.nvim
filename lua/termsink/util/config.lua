@@ -26,6 +26,11 @@ local defaults = {
   lualine_theme = "termsink",
   plugins = {},
   async_loading = false,
+  -- Which `termcolors` source to read colors from: an emulator name ("rex",
+  -- "ghostty"), "osc", or an absolute path to an emulator binary. Passed
+  -- straight through as `termcolors --source <value>`. nil = detect from
+  -- $TERM_PROGRAM, then emulator marker variables, then termcolors' own auto.
+  source = nil,
   -- Contrast thresholds for the readability pipeline.
   -- See lua/termsink/colors/contrast.lua for defaults and meaning.
   contrast_thresholds = {},
