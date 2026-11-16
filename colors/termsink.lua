@@ -6,7 +6,7 @@ package.loaded["termsink.functions"] = nil
 package.loaded["termsink.highlights"] = nil
 package.loaded["termsink.highlights.plugins"] = nil
 -- Lualine caches required theme modules; clear so re-sourcing this colorscheme
--- (e.g. after a Ghostty theme switch) picks up the freshly-derived palette
+-- (e.g. after a terminal theme switch) picks up the freshly-derived palette
 -- instead of the previous load's stale fg/bg values.
 for k in pairs(package.loaded) do
   if k:match("^lualine%.themes%.termsink") then

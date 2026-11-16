@@ -372,7 +372,7 @@ M.async_highlights.editor = function()
     -- Visual        = { fg = m.none, bg = e.selection },
     -- When Visual is used as a row overlay (e.g. lazygit-in-nvim, plugin
     -- selection highlights), the underlying terminal cells keep their own
-    -- ANSI fg. Ghostty's selection_bg can be near-white, which leaves
+    -- ANSI fg. The terminal's selection_bg can be near-white, which leaves
     -- light-fg text unreadable on top of it. Fit bg against e.fg so any
     -- typical light text remains legible.
     Visual = (function()

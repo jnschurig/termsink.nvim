@@ -38,15 +38,21 @@ files:
  Also, this is the module that goes trough the contrast table
  and applies the darker backgrounds.
 
- ## ghosttyconfig.lua
- Used for fetching terminal colors as reported by the Ghostty api command
- `ghostty +show-config`. This command runs in other terminal emulators as well,
- so long as Ghostty is installed, configured, and is in the active Path.
+ ## reader.lua
+ Fetches the terminal's colors by running the `termcolors` CLI (JSON, hex) and
+ mapping its output to the `term_colors` table. Chooses the termcolors source
+ from the `source` option, then `$TERM_PROGRAM`, then emulator marker
+ variables, then termcolors' own auto-detection. On failure it returns an
+ error and the theme loads its built-in default palette.
+
+ ## derive.lua
+ Fills in colors the terminal did not report (null palette slots, background,
+ foreground, cursor, selection background) from the colors it did report.
 
  ## oklch.lua
  OKLCH color-space conversions and hue-preserving lightness helpers.
  All readability adjustments preserve hue (within ~5°) so the chosen
- Ghostty palette's color family is retained.
+ terminal palette's color family is retained.
 
  ## contrast.lua
  Contrast and perceptual-distance primitives:
@@ -95,7 +101,7 @@ files:
  - Headless run against all fixture palettes:
    `nvim --headless -l scripts/audit.lua`
  - Single fixture: `nvim --headless -l scripts/audit.lua "Aardvark Blue"`
- - Live audit of the currently loaded palette: `:GhosttysyncAudit`
+ - Live audit of the currently loaded palette: `:TermsinkAudit`
  - Add a new fixture by dropping a file in `tests/fixtures/palettes/`
    (return a `term_colors`-shaped table) and registering it in
    `tests/fixtures/palettes/init.lua`.

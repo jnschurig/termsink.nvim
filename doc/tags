@@ -1,9 +1,8 @@
-ghosttysync-configuration	ghosttysync.nvim.txt	/*ghosttysync-configuration*
-ghosttysync-examples	ghosttysync.nvim.txt	/*ghosttysync-examples*
-ghosttysync-features	ghosttysync.nvim.txt	/*ghosttysync-features*
-ghosttysync-functions	ghosttysync.nvim.txt	/*ghosttysync-functions*
-ghosttysync-lualine-setup	ghosttysync.nvim.txt	/*ghosttysync-lualine-setup*
-ghosttysync-mappings	ghosttysync.nvim.txt	/*ghosttysync-mappings*
-ghosttysync-styles	ghosttysync.nvim.txt	/*ghosttysync-styles*
-ghosttysync-usage	ghosttysync.nvim.txt	/*ghosttysync-usage*
-ghosttysync.nvim	ghosttysync.nvim.txt	/*ghosttysync.nvim*
+termsink-configuration	termsink.nvim.txt	/*termsink-configuration*
+termsink-examples	termsink.nvim.txt	/*termsink-examples*
+termsink-features	termsink.nvim.txt	/*termsink-features*
+termsink-functions	termsink.nvim.txt	/*termsink-functions*
+termsink-lualine-setup	termsink.nvim.txt	/*termsink-lualine-setup*
+termsink-mappings	termsink.nvim.txt	/*termsink-mappings*
+termsink-usage	termsink.nvim.txt	/*termsink-usage*
+termsink.nvim	termsink.nvim.txt	/*termsink.nvim*

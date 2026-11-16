@@ -1,8 +1,16 @@
 ================================================================================
-                                                                 *ghosttysync.nvim*
+                                                                 *termsink.nvim*
 
-ghosttysync.nvim is a colorscheme for NeoVim written in Lua with built in support
-for native LSP, TreeSitter and many more plugins.
+termsink.nvim is a colorscheme for NeoVim written in Lua that takes its colors
+from the terminal it runs in, with built in support for native LSP, TreeSitter
+and many more plugins.
+
+Colors are read with the `termcolors` CLI, which must be on your PATH:
+
+    brew install jnschurig/termcolors/termcolors
+
+If the colors cannot be read, a built-in default palette is used. Run
+`:checkhealth termsink` to see why.
 
 Adapted from the material.nvim theme: https://github.com/marko-cerovac/material.nvim
 
@@ -11,16 +19,16 @@ Many Thanks to Marko Cerovac for providing such an excellent source theme.
 ================================================================================
 CONTENTS
 
-    1. Features ................. |ghosttysync-features|
-    2. Usage .................... |ghosttysync-usage|
-    3. Configuration ............ |ghosttysync-configuration|
-    4. Examples ................. |ghosttysync-examples|
-    5. Lualine setup ............ |ghosttysync-lualine-setup|
-    6. Functions ................ |ghosttysync-functions|
-    7. Mappings ................. |ghosttysync-mappings|
+    1. Features ................. |termsink-features|
+    2. Usage .................... |termsink-usage|
+    3. Configuration ............ |termsink-configuration|
+    4. Examples ................. |termsink-examples|
+    5. Lualine setup ............ |termsink-lualine-setup|
+    6. Functions ................ |termsink-functions|
+    7. Mappings ................. |termsink-mappings|
 
 ================================================================================
-1. Features                                             *ghosttysync-features*
+1. Features                                             *termsink-features*
 
     + A wide array of supported plugins like: -TreeSitter
                                               -LSP Diagnostics
@@ -47,21 +55,21 @@ CONTENTS
     + Asynchronous highlight loading which makes the theme extremely fast
 
 ================================================================================
-2. Usage                                                   *ghosttysync-usage*
+2. Usage                                                   *termsink-usage*
 
     To use the default settings, just apply the theme
 
     If you are using Vim-Script:
-        colorscheme ghosttysync
+        colorscheme termsink
 
     If you are using Lua:
-        vim.cmd 'colorscheme ghosttysync'
+        vim.cmd 'colorscheme termsink'
 
 
 ================================================================================
-3. Configuration                                   *ghosttysync-configuration*
+3. Configuration                                   *termsink-configuration*
 
-What sets ghosttysync.nvim apart from most Vim/NeoVim themes is the wide array
+What sets termsink.nvim apart from most Vim/NeoVim themes is the wide array
 of options for customising the theme.
 
 In order for these settings to take effect, they should be placed in your
@@ -71,11 +79,11 @@ Options:
 
 All other options are passed to a setup function
 
-    + require('ghosttysync').setup()
+    + require('termsink').setup()
 
 This is an example of the setup function with the default values:
 
-    require('ghosttysync').setup({
+    require('termsink').setup({
         contrast = {
         styles = {
             comments = {},
@@ -99,6 +107,14 @@ This is an example of the setup function with the default values:
           Typographic attributes applied to syntax roles. Empty tables mean
           "default appearance". Any vim.api.nvim_set_hl attribute works:
           { italic = true }, { bold = true }, { underline = true }, etc.
+
+    + source  {string}
+          Which terminal `termcolors` reads, passed straight through as
+          `termcolors --source <value>`: an emulator name ("rex",
+          "ghostty") or an absolute path to an emulator binary.
+          Default nil: detect from $TERM_PROGRAM, then the
+          GHOSTTY_RESOURCES_DIR / REX_SESSION marker variables, then
+          termcolors' own auto-detection.
 
     + disable  {table}
           - background: set true for a transparent terminal (NONE bg)
@@ -146,15 +162,15 @@ This is an example of the setup function with the default values:
             - nvim-notify
 
 ================================================================================
-4. Examples                                         *ghosttysync-examples*
+4. Examples                                         *termsink-examples*
 
 Example config in Lua:
 
     -- Theme style
-    vim.g.ghosttysync_style = 'deep ocean'
+    vim.g.termsink_style = 'deep ocean'
 
     -- Colorscheme settings
-    require('ghosttysync').setup({
+    require('termsink').setup({
         plugins = {
            "dap",
            "gitsigns",
@@ -174,20 +190,20 @@ Example config in Lua:
     })
 
     -- Apply the colorscheme
-    vim.cmd 'colorscheme ghosttysync'
+    vim.cmd 'colorscheme termsink'
 
 ================================================================================
-5. Lualine setup                                   *ghosttysync-lualine-setup*
+5. Lualine setup                                   *termsink-lualine-setup*
 
     To enable the lualine themes, first set the theme
-    in your lualine settings to `auto` or `ghosttysync`
+    in your lualine settings to `auto` or `termsink`
 
         require('lualine').setup {~
           options = {~
             -- ... your lualine config
             theme = 'auto'~
             or
-            theme = 'ghosttysync'~
+            theme = 'termsink'~
             -- ... your lualine config
           }~
         }~
@@ -195,48 +211,48 @@ Example config in Lua:
     Then, choose the style trough a variable called lualine_style
     in the theme setup function
 
-    require('ghosttysync').setup({~
+    require('termsink').setup({~
         lualine_style = 'default' -- the default style
         or
         lualine_style = 'stealth' -- the stealth style
     })~
 
-    If the theme, doesn't look right, it's probably because ghosttysync.nvim
-    is being loaded before lualine, causing the other ghosttysync theme
+    If the theme, doesn't look right, it's probably because termsink.nvim
+    is being loaded before lualine, causing the other termsink theme
     that comes built-in to lualine to be used.
-    To fix this, either load ghosttysync.nvim after lualine (preferred way)
+    To fix this, either load termsink.nvim after lualine (preferred way)
     or set the lualine theme to one of these two values in your lualine settings
 
     require('lualine').setup {~
       options = {~
         -- ... your lualine config
-        theme = 'ghosttysync-nvim' -- the default style
+        theme = 'termsink-nvim' -- the default style
         or
-        theme = 'ghosttysync-stealth' -- the stealth style
+        theme = 'termsink-stealth' -- the stealth style
         -- ... your lualine config
       }~
     }~
 
 ================================================================================
-6. Functions                                           *ghosttysync-functions*
+6. Functions                                           *termsink-functions*
 
 Material.nvim has built in functions that you can call or bind to a key
 
     + Use telescope.nvim to switch to a style
-          :lua require("ghosttysync.functions").find_style()~
+          :lua require("termsink.functions").find_style()~
 
     + Switch to a specific style
           Call the function for switching and pass in the name of the style
           that you want to switch to:
-          :lua require('ghosttysync.functions').change_style('palenight')~
+          :lua require('termsink.functions').change_style('palenight')~
 
     + Toggle the end of buffer lines
           Call this function if you want to toggle the visibility of the lines at the end of
           the buffer:
-          :lua require('ghosttysync.functions').toggle_eob()~
+          :lua require('termsink.functions').toggle_eob()~
 
 ================================================================================
-7. Mappings                                             *ghosttysync-mappings*
+7. Mappings                                             *termsink-mappings*
 
 You can map the built-in functions to keys
 This will allow you to change the style and toggle the end-of-buffer lines
@@ -244,11 +260,11 @@ at keypress
 
 Example:
 
-nnoremap <leader>tf :lua require('ghosttysync.functions').find_style()<CR>
+nnoremap <leader>tf :lua require('termsink.functions').find_style()<CR>
 
-nnoremap <leader>tm :lua require('ghosttysync.functions').toggle_style()<CR>
+nnoremap <leader>tm :lua require('termsink.functions').toggle_style()<CR>
 
-nnoremap <leader>te :lua require('ghosttysync.functions').toggle_eob()<CR>
+nnoremap <leader>te :lua require('termsink.functions').toggle_eob()<CR>
 
 ================================================================================
 vim:tw=78:ts=4:ft=help:norl:

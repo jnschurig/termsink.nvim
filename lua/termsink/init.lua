@@ -11,7 +11,7 @@
 --        \/__/         \/__/
 --
 -- Colorscheme name:        termsink.nvim
--- Description:             Dynamic colorscheme for NeoVim based on the current Ghostty terminal theme
+-- Description:             Dynamic colorscheme for NeoVim based on the current terminal theme (read via the termcolors CLI)
 -- Author:                  James Schurig -> jnschurig@gmail.com
 -- Website:                 https://github.com/jnschurig/termsink.nvim
 

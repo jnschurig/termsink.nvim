@@ -81,19 +81,6 @@ local function hex_to_rgb(hex)
   }
 end
 
-local function invert_hue(rgb_number)
-  return (1 - (rgb_number / 255)) * 255
-end
-
-M.invert_color = function(color)
-  local rgb = hex_to_rgb(color)
-  local r = invert_hue(rgb[1])
-  local g = invert_hue(rgb[2])
-  local b = invert_hue(rgb[3])
-
-  return rgb_to_hex(r, g, b)
-end
-
 -- Scale OKLCH lightness by `factor` (preserves hue and chroma).
 -- Negative factor returns the input unchanged (legacy guard).
 M.adjust_luminance = function(color, factor)
@@ -141,28 +128,6 @@ M.darken = function(color, amount, bg)
     bg = "#000000"
   end
   return M.blend(color, bg, amount)
-end
-
-M.check_colors = function(color_table)
-  if color_table.background == nil and color_table.foreground ~= nil then
-    color_table.background = M.invert_color(color_table.foreground)
-  end
-  if color_table.background ~= nil and color_table.foreground == nil then
-    color_table.foreground = M.invert_color(color_table.background)
-  end
-  if color_table.selection_background == nil and color_table.selection_foreground ~= nil then
-    color_table.selection_background = M.invert_color(color_table.selection_foreground)
-  end
-  if color_table.selection_background ~= nil and color_table.selection_foreground == nil then
-    color_table.selection_foreground = M.invert_color(color_table.selection_background)
-  end
-  if color_table.cursor_color == nil and color_table.cursor_text ~= nil then
-    color_table.cursor_color = M.invert_color(color_table.cursor_text)
-  end
-  if color_table.cursor_color ~= nil and color_table.cursor_text == nil then
-    color_table.cursor_text = M.invert_color(color_table.cursor_color)
-  end
-  return color_table
 end
 
 M.print_colors = function(color_table)

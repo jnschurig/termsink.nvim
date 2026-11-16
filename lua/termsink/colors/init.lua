@@ -56,7 +56,6 @@ end
 
 if term_colors and term_colors.colors then
   term_colors.colors = derive.derive_missing(term_colors.colors, default_term_colors.colors.palette)
-  term_colors.colors = functions.check_colors(term_colors.colors)
 end
 
 -- When the terminal reported colors but no selection foreground, keep it nil
