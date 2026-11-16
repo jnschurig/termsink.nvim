@@ -366,6 +366,72 @@ do
   )
 end
 
+-- ---------- derive ----------
+print("derive:")
+do
+  local derive = require("termsink.colors.derive")
+  local defaults = {}
+  for i = 1, 16 do
+    defaults[i] = "#101010"
+  end
+  defaults[1], defaults[8], defaults[16] = "#000000", "#c0c0c0", "#ffffff"
+
+  local function valid(hex)
+    return type(hex) == "string" and hex:match("^#%x%x%x%x%x%x$") ~= nil
+  end
+  local function L(hex)
+    return oklch.hex_to_oklch(hex).L
+  end
+
+  -- Dark, palette only.
+  local dark = { palette = {} }
+  for i = 1, 16 do
+    dark.palette[i] = "#808080"
+  end
+  dark.palette[1], dark.palette[8], dark.palette[16] = "#1d1f21", "#c5c8c6", "#eaeaea"
+  local c = derive.derive_missing(dark, defaults)
+  check("derive: bg from slot 0", c.background == "#1d1f21", tostring(c.background))
+  check("derive: fg is the better-contrast of slots 7/15", c.foreground == "#eaeaea", tostring(c.foreground))
+  check("derive: cursor from fg/bg", c.cursor_color == c.foreground and c.cursor_text == c.background)
+  check(
+    "derive: dark selection is lighter than bg",
+    valid(c.selection_bg) and L(c.selection_bg) > L(c.background) and L(c.selection_bg) < L(c.foreground),
+    tostring(c.selection_bg)
+  )
+  check("derive: selection_fg left for the fallback", c.selection_fg == nil)
+
+  -- Light bg/fg given, everything else missing, holes in the palette.
+  local light = { palette = { [2] = "#c82829" }, background = "#ffffff", foreground = "#4d4d4c" }
+  c = derive.derive_missing(light, defaults)
+  check("derive: reported bg/fg are kept", c.background == "#ffffff" and c.foreground == "#4d4d4c")
+  check(
+    "derive: null slots take the default for that slot",
+    c.palette[1] == "#000000" and c.palette[2] == "#c82829" and c.palette[16] == "#ffffff" and #c.palette == 16
+  )
+  check(
+    "derive: light selection is darker than bg",
+    valid(c.selection_bg) and L(c.selection_bg) < L(c.background) and L(c.selection_bg) > L(c.foreground),
+    tostring(c.selection_bg)
+  )
+
+  -- Nothing reported but bg: slot 7 wins when it contrasts better.
+  c = derive.derive_missing({ background = "#ffffff" }, { [1] = "#000000", [8] = "#404040", [16] = "#f0f0f0" })
+  check("derive: fg picks slot 7 on a light bg", c.foreground == "#404040", tostring(c.foreground))
+
+  -- Reported specials are never overwritten.
+  local full = {
+    palette = vim.deepcopy(defaults),
+    background = "#111111",
+    foreground = "#eeeeee",
+    cursor_color = "#aa0000",
+    cursor_text = "#00aa00",
+    selection_bg = "#0000aa",
+    selection_fg = "#aaaa00",
+  }
+  local before = vim.deepcopy(full)
+  check("derive: complete input is unchanged", vim.deep_equal(derive.derive_missing(full, defaults), before))
+end
+
 -- ---------- summary ----------
 print(string.format("\n%d passed, %d failed", passes, failures))
 if failures > 0 then

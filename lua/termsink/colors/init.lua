@@ -1,4 +1,5 @@
-local termcolor = require("termsink.colors.ghosttyconfig")
+local reader = require("termsink.colors.reader")
+local derive = require("termsink.colors.derive")
 local functions = require("termsink.functions")
 local contrast = require("termsink.colors.contrast")
 local oklch = require("termsink.colors.oklch")
@@ -38,18 +39,34 @@ local default_term_colors = {
   },
 }
 
-local term_colors, term_color_error = termcolor.get_theme_info()
+-- nil + error = a real failure (warn once); nil + nil = the terminal simply
+-- has no colors to offer (stay silent). Both fall back to the defaults.
+local term_colors, term_color_error = reader.get_theme_info()
 
-if term_color_error then
-  print("Error: " .. term_color_error)
-  term_colors = default_term_colors
+-- This module is re-evaluated on every `:colorscheme`, so guard the warning
+-- with a global: one message per Neovim session.
+if term_color_error and not vim.g.termsink_warned then
+  vim.g.termsink_warned = true
+  vim.notify(
+    term_color_error .. "\nUsing the built-in default colors. See :checkhealth termsink",
+    vim.log.levels.WARN,
+    { title = "termsink" }
+  )
 end
 
 if term_colors and term_colors.colors then
+  term_colors.colors = derive.derive_missing(term_colors.colors, default_term_colors.colors.palette)
   term_colors.colors = functions.check_colors(term_colors.colors)
 end
 
+-- When the terminal reported colors but no selection foreground, keep it nil
+-- so the fallback below picks bg or fg instead of the unrelated default.
+local keep_selection_fg_nil = term_colors ~= nil and term_colors.colors.selection_fg == nil
+
 term_colors = vim.tbl_deep_extend("keep", term_colors or {}, default_term_colors)
+if keep_selection_fg_nil then
+  term_colors.colors.selection_fg = nil
+end
 local palette = term_colors.colors.palette
 
 -- Bg dark/light detection via OKLCH lightness.
@@ -129,7 +146,7 @@ colors.editor.fg = term_colors.colors.foreground
 colors.editor.fg_dark = functions.adjust_color_value(colors.editor.fg, standard_adjustment)
 colors.editor.selection = term_colors.colors.selection_bg
 colors.editor.selection_fg = term_colors.colors.selection_fg
--- Ghostty themes commonly omit selection-foreground; without a fallback,
+-- Terminal themes commonly omit the selection foreground; without a fallback,
 -- Visual ends up with fg=nil and the underlying syntax color (e.g. String's
 -- green) bleeds through on top of the selection bg with no contrast. Pick
 -- whichever of bg/fg reads better on the selection bg as the fallback; the

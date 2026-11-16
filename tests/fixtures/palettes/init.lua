@@ -1,6 +1,6 @@
 -- All palette fixtures for the readability harness.
 -- Each entry is a `term_colors`-shaped table matching what
--- termsink.colors.ghosttyconfig.get_theme_info() would return.
+-- termsink.colors.reader.get_theme_info() would return.
 
 return {
   require("tests.fixtures.palettes.rose-pine-moon"),
@@ -12,4 +12,6 @@ return {
   require("tests.fixtures.palettes.arcoiris"),
   require("tests.fixtures.palettes.3024-day"),
   require("tests.fixtures.palettes.dawnfox"),
+  require("tests.fixtures.palettes.palette-only-dark"),
+  require("tests.fixtures.palettes.palette-only-light"),
 }

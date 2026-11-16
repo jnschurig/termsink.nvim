@@ -37,7 +37,7 @@ local function int_to_hex(n)
   return string.format("#%06x", n)
 end
 
--- Apply a fixture by monkey-patching ghosttyconfig and reloading.
+-- Apply a fixture by monkey-patching the color reader and reloading.
 local function apply_fixture(fixture)
   -- Reset package state so colors / highlights re-evaluate.
   for k in pairs(package.loaded) do
@@ -46,9 +46,9 @@ local function apply_fixture(fixture)
     end
   end
 
-  -- Patch ghosttyconfig BEFORE colors loads.
-  local cfg = require("termsink.colors.ghosttyconfig")
-  cfg.get_theme_info = function()
+  -- Patch the reader BEFORE colors loads.
+  local reader = require("termsink.colors.reader")
+  reader.get_theme_info = function()
     return fixture, nil
   end
 
